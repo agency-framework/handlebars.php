@@ -1,11 +1,11 @@
-# handlebars.php-agency-boilerplate
+# handlebars.php
 
-Handlebar.php Helper for [agency-boilerplate](https://github.com/StephanGerbeth/agency-boilerplate).
+Handlebar.php Helper for [agency-boilerplate](https://github.com/agency-framework/agency-boilerplate).
 
 ## Local Installation
 
 ```
-./handlebars.php-agency-boilerplate $ composer install
+./handlebars.php $ composer install
 ```
 
 ## Options
