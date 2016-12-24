@@ -171,62 +171,6 @@ class Core
         $this->partialsDefaultData[$partialPath] = $data;
     }
 
-    public function renderPage($pagePath, $data)
-    {
-
-
-//        echo '<pre>';
-//        print_r(array_merge_recursive(array(
-//
-//            'options' => [
-//                'scripts' => [
-//                    'css' => [
-//                        'critical' => '#scripts.css.critical'
-//                    ],
-//                    'js' => [
-//                        'main' => '#scripts.js.main'
-//                    ]
-//                ],
-//                'server' => [
-//                    'dest' => '#scripts.server.dest'
-//                ]
-//            ],
-//
-//            'body' => $html), $data));
-//        echo '</pre>';
-
-        $data = array_merge_recursive([
-            'options' => [
-                'scripts' => [
-                    'css' => [
-                        'main' => './export/css/style.css',
-                        'critical' => './export/css/critical.css'
-                    ],
-                    'js' => [
-                        'main' => './export/js/app.js',
-                        'embed' => [
-                            "./export/js/embed/_main.js",
-                            "./export/js/embed/animationFrame.js",
-                            "./export/js/embed/agency_pkg_polyfills.js",
-                            "./export/js/embed/agency_pkg_service_dev_tools.js"
-                        ]
-                    ]
-                ],
-                'server' => [
-                    'dest' => './'
-                ]
-            ],
-
-            'relativeToRoot' => './'
-
-        ], $data);
-
-        $body = $this->getEngine()->render('index', $data);
-        return str_replace('{% body %}', $body, $this->getEngine()->render($this->partialsDefaultData[$pagePath]['layout'], $data));
-
-
-    }
-
     public static function setVar($vars, $value, &$data)
     {
         if (is_string($vars)) {
