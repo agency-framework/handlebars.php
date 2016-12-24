@@ -2,14 +2,14 @@
 
 require __DIR__ . '/../../vendor/autoload.php';
 $core = \AgencyFramework\Handlebars\Core::init([
-   'partialDir' => [__DIR__ . '/tmpl/']
+    'partialDir' => [__DIR__ . '/tmpl/']
 ]);
 
 $data = [
-   'object-1' => [
-      'hello' => 'world'
-   ],
-   'object-2' => null
+    'object-1' => [
+        'hello' => 'world'
+    ],
+    'object-2' => null
 ];
 
 echo $core->getEngine()->render('index', $data);

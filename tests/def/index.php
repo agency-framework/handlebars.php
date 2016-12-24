@@ -2,7 +2,7 @@
 
 require __DIR__ . '/../../vendor/autoload.php';
 $core = \AgencyFramework\Handlebars\Core::init([
-   'partialDir' => [__DIR__ . '/tmpl/']
+    'partialDir' => [__DIR__ . '/tmpl/']
 ]);
 
 $yamlData = $core->getDefaultPartialData('index');
@@ -14,40 +14,40 @@ echo $core->getEngine()->render('index', $yamlData);
 
 <table border="1">
 
-   <tbody>
+    <tbody>
 
-   <tr>
+    <tr>
 
-      <th>Group</th>
-      <th>Name</th>
-      <th>Type</th>
-      <th>Title</th>
-      <th>Description</th>
-      <th>default</th>
+        <th>Group</th>
+        <th>Name</th>
+        <th>Type</th>
+        <th>Title</th>
+        <th>Description</th>
+        <th>default</th>
 
-   </tr>
+    </tr>
 
-   <?php
+    <?php
 
-   $definitions = $GLOBALS[$core::getInstance()->getGlobalDefTemp()];
-   foreach ($GLOBALS[$core::getInstance()->getGlobalDefTemp()] as $groupName => $group) {
-      foreach ($group as $field) {
-         ?>
-         <tr>
-            <td><?php echo $groupName; ?></td>
-            <td><?php echo array_key_exists('name', $field) ? $field['name'] : ''; ?></td>
-            <td><?php echo array_key_exists('type', $field) ? $field['type'] : ''; ?></td>
-            <td><?php echo array_key_exists('title', $field) ? $field['title'] : ''; ?></td>
-            <td><?php echo array_key_exists('desc', $field) ? $field['desc'] : ''; ?></td>
-            <td><?php echo array_key_exists('default', $field) ? $field['default'] : ''; ?></td>
-         </tr>
-         <?php
-      }
-   }
+    $definitions = $GLOBALS[$core::getInstance()->getGlobalDefTemp()];
+    foreach ($GLOBALS[$core::getInstance()->getGlobalDefTemp()] as $groupName => $group) {
+        foreach ($group as $field) {
+            ?>
+            <tr>
+                <td><?php echo $groupName; ?></td>
+                <td><?php echo array_key_exists('name', $field) ? $field['name'] : ''; ?></td>
+                <td><?php echo array_key_exists('type', $field) ? $field['type'] : ''; ?></td>
+                <td><?php echo array_key_exists('title', $field) ? $field['title'] : ''; ?></td>
+                <td><?php echo array_key_exists('desc', $field) ? $field['desc'] : ''; ?></td>
+                <td><?php echo array_key_exists('default', $field) ? $field['default'] : ''; ?></td>
+            </tr>
+            <?php
+        }
+    }
 
-   ?>
+    ?>
 
 
-   </tbody>
+    </tbody>
 
 </table>

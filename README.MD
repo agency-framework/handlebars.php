@@ -42,13 +42,13 @@ Sets prefix for template files.
 
 ### globalDefTemp
 
-Type: `string` | Default: `AGENCY_BOILERPLATE_HBS_DEF_TEMP` 
+Type: `string` | Default: `AGENCY_BOILERPLATE_HBS_DEF_TEMP`
 
 Name for global Def-Helper temp variable for call defintions.
 
 ### globalMixinPath
 
-Type: `string` | Default: `AGENCY_BOILERPLATE_HBS_MIXIN_PATH` 
+Type: `string` | Default: `AGENCY_BOILERPLATE_HBS_MIXIN_PATH`
 
 Name for global variable, need for rendering mixin.
 
@@ -75,25 +75,12 @@ Sets partial dirs for loading partial via mixin helper.
 
 ### Helpers
 
-#### lookup
+Available Helpers: `lookup`, `replace`, `raw`, `with`, `extname`, `base64`, `relative`, `stringify`
 
-<https://hbs-php-agency-boilerplate.herokuapp.com/tests/lookup>
-
-#### mixin
+#### Example Helper "mixin"
 
 <https://hbs-php-agency-boilerplate.herokuapp.com/tests/mixin>
 
-#### stringfy
-
-<https://hbs-php-agency-boilerplate.herokuapp.com/tests/stringify>
-
-#### with
-
-<https://hbs-php-agency-boilerplate.herokuapp.com/tests/with>
-
-#### def
-
-<https://hbs-php-agency-boilerplate.herokuapp.com/tests/def>
 
 **Pattern**:
 

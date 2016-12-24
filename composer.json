@@ -16,7 +16,7 @@
   },
   "require": {
     "php": ">=5.3.0",
-    "justblackbird/handlebars.php-helpers": "~1.0.0",
+    "justblackbird/handlebars.php-helpers": "~1.1.0",
     "mustangostang/spyc": "^0.5.1"
   },
   "autoload": {
