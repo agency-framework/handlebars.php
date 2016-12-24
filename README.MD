@@ -10,7 +10,7 @@ Handlebar.php Helper for [agency-boilerplate](https://github.com/agency-framewor
 
 ## Options
 
-`\AgencyBoilerplate\Handlebars\Core::init($options)`
+`\AgencyFramework\Handlebars\Core::init($options)`
 
 ```php
 [
@@ -156,7 +156,7 @@ Sets default property value.
 require __DIR__ . '/../../vendor/autoload.php';
 
 // init core
-$core = \AgencyBoilerplate\Handlebars\Core::init([
+$core = \AgencyFramework\Handlebars\Core::init([
   'partialDir' => __DIR__ . '/tmpl/'
 ]);
 

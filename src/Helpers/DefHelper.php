@@ -1,7 +1,7 @@
 <?php
-namespace AgencyBoilerplate\Handlebars\Helpers;
+namespace AgencyFramework\Handlebars\Helpers;
 
-use AgencyBoilerplate\Handlebars\Core;
+use AgencyFramework\Handlebars\Core;
 use Handlebars\Context;
 use Handlebars\StringWrapper;
 use Handlebars\Template;

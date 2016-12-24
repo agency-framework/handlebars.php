@@ -1,6 +1,6 @@
 <?php
 
-namespace AgencyBoilerplate\Handlebars;
+namespace AgencyFramework\Handlebars;
 
 
 class Core
@@ -22,7 +22,7 @@ class Core
    protected $defDefaultGroup;
 
    /**
-    * @return \AgencyBoilerplate\Handlebars\Core
+    * @return \AgencyFramework\Handlebars\Core
     */
    public static function getInstance()
    {
@@ -76,8 +76,8 @@ class Core
       $baseDirs = $options['partialDir'];
       self::$instance = new self(new \Handlebars\Handlebars(array(
          'helpers' => new Helpers(),
-         'loader' => new \AgencyBoilerplate\Handlebars\Loader\FilesystemLoader($baseDirs, $options),
-         'partials_loader' => new \AgencyBoilerplate\Handlebars\Loader\FilesystemLoader($baseDirs, $options)
+         'loader' => new \AgencyFramework\Handlebars\Loader\FilesystemLoader($baseDirs, $options),
+         'partials_loader' => new \AgencyFramework\Handlebars\Loader\FilesystemLoader($baseDirs, $options)
       )), $options['globalDefTemp'], $options['globalMixinPath'], $options['globalMixinDeactivated'], $options['defDefaultGroup']);
       return self::$instance;
    }
@@ -121,14 +121,14 @@ class Core
 
    public function getDefData($partialName, $properties = null)
    {
-      $core = \AgencyBoilerplate\Handlebars\Core::getInstance();
+      $core = \AgencyFramework\Handlebars\Core::getInstance();
       $fileContent = $core->getEngine()->getPartialsLoader()->load($partialName);
 
 
-      $GLOBALS[\AgencyBoilerplate\Handlebars\Core::getInstance()->getGlobalDefTemp()] = [];
-      $GLOBALS[\AgencyBoilerplate\Handlebars\Core::getInstance()->getGlobalMixinDeactivated()] = true;
+      $GLOBALS[\AgencyFramework\Handlebars\Core::getInstance()->getGlobalDefTemp()] = [];
+      $GLOBALS[\AgencyFramework\Handlebars\Core::getInstance()->getGlobalMixinDeactivated()] = true;
       $core->getEngine()->render($partialName, $core::getDefaultPartialData($partialName));
-      $GLOBALS[\AgencyBoilerplate\Handlebars\Core::getInstance()->getGlobalMixinDeactivated()] = false;
+      $GLOBALS[\AgencyFramework\Handlebars\Core::getInstance()->getGlobalMixinDeactivated()] = false;
 
       $key = explode('/', $partialName);
       $key = $key[count($key) - 1];
@@ -141,7 +141,7 @@ class Core
 
    public function getPathsFromMixins($partialName)
    {
-      $core = \AgencyBoilerplate\Handlebars\Core::getInstance();
+      $core = \AgencyFramework\Handlebars\Core::getInstance();
       $fileContent = $core->getEngine()->getPartialsLoader()->load($partialName);
       preg_match_all("/{{[{#]mixin \\\"([^\"]*)\\\"[^{}]*}}/", $fileContent, $matches);
       return $matches[1];

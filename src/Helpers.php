@@ -1,6 +1,6 @@
 <?php
 
-namespace AgencyBoilerplate\Handlebars;
+namespace AgencyFramework\Handlebars;
 
 class Helpers extends \Handlebars\Helpers
 {
@@ -11,12 +11,12 @@ class Helpers extends \Handlebars\Helpers
 
       $storage = new \JustBlackBird\HandlebarsHelpers\Layout\BlockStorage();
       $this->add('block', new \JustBlackBird\HandlebarsHelpers\Layout\BlockHelper($storage));
-      $this->add('mixin', new \AgencyBoilerplate\Handlebars\Helpers\MixinHelper($storage));
-      $this->add('with', new \AgencyBoilerplate\Handlebars\Helpers\WithHelper());
+      $this->add('mixin', new \AgencyFramework\Handlebars\Helpers\MixinHelper($storage));
+      $this->add('with', new \AgencyFramework\Handlebars\Helpers\WithHelper());
       $this->add('content', new \JustBlackBird\HandlebarsHelpers\Layout\OverrideHelper($storage));
-      $this->add('lookup', new \AgencyBoilerplate\Handlebars\Helpers\LookupHelper());
-      $this->add('stringify', new \AgencyBoilerplate\Handlebars\Helpers\StringifyHelper());
-      $this->add('def', new \AgencyBoilerplate\Handlebars\Helpers\DefHelper());
+      $this->add('lookup', new \AgencyFramework\Handlebars\Helpers\LookupHelper());
+      $this->add('stringify', new \AgencyFramework\Handlebars\Helpers\StringifyHelper());
+      $this->add('def', new \AgencyFramework\Handlebars\Helpers\DefHelper());
    }
 
 }

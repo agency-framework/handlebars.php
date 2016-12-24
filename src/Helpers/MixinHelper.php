@@ -1,6 +1,6 @@
 <?php
 
-namespace AgencyBoilerplate\Handlebars\Helpers;
+namespace AgencyFramework\Handlebars\Helpers;
 
 use Handlebars\Context;
 use Handlebars\StringWrapper;
@@ -31,7 +31,7 @@ class MixinHelper extends \JustBlackBird\HandlebarsHelpers\Layout\AbstractBlockH
       };
 
       if (count($scope) < 1) {
-         $core = \AgencyBoilerplate\Handlebars\Core::getInstance();
+         $core = \AgencyFramework\Handlebars\Core::getInstance();
          // preload for forced yaml exclude and saved temp.
          $context->push($core->getDefaultPartialData($partialName));
       } else {
@@ -41,7 +41,7 @@ class MixinHelper extends \JustBlackBird\HandlebarsHelpers\Layout\AbstractBlockH
       $name = explode('/', $partialName);
       $name = end($name);
 
-      array_push($GLOBALS[\AgencyBoilerplate\Handlebars\Core::getInstance()->getGlobalMixinPath()], $name);
+      array_push($GLOBALS[\AgencyFramework\Handlebars\Core::getInstance()->getGlobalMixinPath()], $name);
 
       $buffer = null;
       if ($source) {
@@ -57,7 +57,7 @@ class MixinHelper extends \JustBlackBird\HandlebarsHelpers\Layout\AbstractBlockH
          $buffer = $template->getEngine()->render($partialName, $context);
       }
       $context->pop();
-      array_pop($GLOBALS[\AgencyBoilerplate\Handlebars\Core::getInstance()->getGlobalMixinPath()]);
+      array_pop($GLOBALS[\AgencyFramework\Handlebars\Core::getInstance()->getGlobalMixinPath()]);
 
       return $buffer;
    }

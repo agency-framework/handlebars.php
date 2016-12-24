@@ -1,7 +1,7 @@
 <?php
 
 require __DIR__ . '/../../vendor/autoload.php';
-$core = \AgencyBoilerplate\Handlebars\Core::init([
+$core = \AgencyFramework\Handlebars\Core::init([
    'partialDir' => [__DIR__ . '/tmpl/']
 ]);
 

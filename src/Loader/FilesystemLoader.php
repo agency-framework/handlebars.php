@@ -1,8 +1,8 @@
 <?php
 
-namespace AgencyBoilerplate\Handlebars\Loader;
+namespace AgencyFramework\Handlebars\Loader;
 
-use AgencyBoilerplate\Handlebars\Core;
+use AgencyFramework\Handlebars\Core;
 
 class FilesystemLoader extends \Handlebars\Loader\FilesystemLoader
 {
