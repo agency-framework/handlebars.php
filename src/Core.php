@@ -10,6 +10,7 @@ class Core
     protected static $instance = null;
     protected static $options = null;
 
+    protected $globalRelativeToRoot = 'AGENCY_FRAMEWORK_HBS_GLOBAL_RELATIVE_TO_ROOT';
 
     // Extra definition
 
@@ -40,6 +41,13 @@ class Core
     {
         $this->engine = $engine;
 
+        if (array_key_exists('globalRelativeToRoot', $options)) {
+            $this->globalRelativeToRoot = $options['globalRelativeToRoot'];
+        }
+        $GLOBALS[$this->globalRelativeToRoot] = '';
+        if (array_key_exists('relativeToRoot', $options)) {
+            $this->setRelativeToRoot($options['relativeToRoot']);
+        }
         if (array_key_exists('globalExtraDefinitionsVar', $options)) {
             $this->globalExtraDefinitionsVar = $options['globalExtraDefinitionsVar'];
         }
@@ -48,7 +56,7 @@ class Core
             $this->globalExtraDefinitionsArea = $options['globalExtraDefinitionsArea'];
         }
         $GLOBALS[$this->globalExtraDefinitionsArea] = [];
-        if (array_key_exists('extraDefinitionsDefaultGroup' ,$options)) {
+        if (array_key_exists('extraDefinitionsDefaultGroup', $options)) {
             $this->extraDefinitionsDefaultGroup = $options['extraDefinitionsDefaultGroup'];
         }
 
@@ -63,7 +71,7 @@ class Core
         }
         $GLOBALS[$this->globalDisableMixin] = false;
 
-        if (array_key_exists('globalDisableExtraDefineArea' ,$options)) {
+        if (array_key_exists('globalDisableExtraDefineArea', $options)) {
             $this->globalDisableExtraDefineArea = $options['globalDisableExtraDefineArea'];
         }
         $GLOBALS[$this->globalDisableExtraDefineArea] = false;
@@ -119,6 +127,11 @@ class Core
         return $this->engine;
     }
 
+    public function getGlobalRelativeToRoot()
+    {
+        return $this->globalRelativeToRoot;
+    }
+
     public function getGlobalExtraDefinitionsVar()
     {
         return $this->globalExtraDefinitionsVar;
@@ -151,36 +164,32 @@ class Core
 
     public function getExtraDefinitionAreaData($partialName, $properties = null)
     {
-        $core = \AgencyFramework\Handlebars\Core::getInstance();
-
         // force partial load, for get yaml data
-        $core->getEngine()->getPartialsLoader()->load($partialName);
+        $this->getEngine()->getPartialsLoader()->load($partialName);
 
         $GLOBALS[\AgencyFramework\Handlebars\Core::getInstance()->getGlobalExtraDefinitionsArea()] = [];
         $GLOBALS[\AgencyFramework\Handlebars\Core::getInstance()->getGlobalDisableMixin()] = true;
-        $core->getEngine()->render($partialName, $core::getDefaultPartialData($partialName));
+        $this->render($partialName, self::getDefaultPartialData($partialName));
         $GLOBALS[\AgencyFramework\Handlebars\Core::getInstance()->getGlobalDisableMixin()] = false;
         $key = explode('/', $partialName);
         $key = $key[count($key) - 1];
-        $properties[$key] = $GLOBALS[$core->getGlobalDefTemp()];
+        $properties[$key] = $GLOBALS[$this->getGlobalDisableExtraDefineArea()];
         return $properties;
     }
 
     public function getExtraDefinitionVarData($partialName, $properties = null)
     {
-        $core = \AgencyFramework\Handlebars\Core::getInstance();
-
         // force partial load, for get yaml data
-        $core->getEngine()->getPartialsLoader()->load($partialName);
+        $this->getEngine()->getPartialsLoader()->load($partialName);
 
         $GLOBALS[\AgencyFramework\Handlebars\Core::getInstance()->getGlobalExtraDefinitionsVar()] = [];
         $GLOBALS[\AgencyFramework\Handlebars\Core::getInstance()->getGlobalDisableMixin()] = true;
-        $core->getEngine()->render($partialName, $core::getDefaultPartialData($partialName));
+        $this->render($partialName, self::getDefaultPartialData($partialName));
         $GLOBALS[\AgencyFramework\Handlebars\Core::getInstance()->getGlobalDisableMixin()] = false;
 
         $key = explode('/', $partialName);
         $key = $key[count($key) - 1];
-        $properties[$key] = $GLOBALS[$core->getGlobalDefTemp()];
+        $properties[$key] = $GLOBALS[$this->getGlobalExtraDefinitionsVar()];
         return $properties;
     }
 
@@ -259,8 +268,11 @@ class Core
 
     public function render($layout, $data)
     {
+        if ($this->getRelativeToRoot()) {
+            $data['relativeToRoot'] = $this->getRelativeToRoot();
+        }
         $html = $this->getEngine()->render($layout, $data);
-        $html = preg_replace_callback('/{{!--[\s\S]*?--}}/', 'rhc', $html);
+        $html = preg_replace('/{{!--[\s\S]*?--}}/', 'rhc', $html);
         return $html;
     }
 
@@ -270,6 +282,16 @@ class Core
 
     public function getAreaDefinitions()
     {
+    }
+
+    public function getRelativeToRoot()
+    {
+        return $GLOBALS[$this->globalRelativeToRoot];
+    }
+
+    public function setRelativeToRoot($relativeToRoot)
+    {
+        $GLOBALS[$this->globalRelativeToRoot] = $relativeToRoot;
     }
 
 }

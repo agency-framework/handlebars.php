@@ -2,7 +2,8 @@
 
 require __DIR__ . '/../../vendor/autoload.php';
 $core = \AgencyFramework\Handlebars\Core::init([
-    'partialDir' => [__DIR__ . '/tmpl/']
+    'partialDir' => [__DIR__ . '/tmpl/'],
+    'relativeToRoot' => '../../'
 ]);
 
 $data = [
@@ -23,6 +24,6 @@ $data = [
     ]
 ];
 
-echo $core->getEngine()->render('index', $data);
+echo $core->render('index', $data);
 
 ?>

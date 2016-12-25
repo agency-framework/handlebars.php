@@ -33,17 +33,17 @@ class MixinHelper extends \JustBlackBird\HandlebarsHelpers\Layout\AbstractBlockH
         $core = \AgencyFramework\Handlebars\Core::getInstance();
         // preload for forced yaml exclude and saved temp.
         $core->getDefaultPartialData($partialName);
-        $scope = array_merge($core->getDefaultPartialData($partialName), $scope);
+        $scope = array_merge($core->getDefaultPartialData($partialName), $scope, ['relativeToRoot' => $GLOBALS[$core->getGlobalRelativeToRoot()]]);
         $context->push($scope);
-
         $name = explode('/', $partialName);
         $name = end($name);
 
         array_push($GLOBALS[\AgencyFramework\Handlebars\Core::getInstance()->getGlobalMixinPath()], $name);
 
+        // Added relativeToRoot to Context
+
         $buffer = null;
         if ($source) {
-
             $template->render($context);
             $this->level++;
             $buffer = $template->getEngine()->render($partialName, $context);

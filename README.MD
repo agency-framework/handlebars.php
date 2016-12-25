@@ -17,6 +17,7 @@ Handlebar.php Helper for [agency-boilerplate](https://github.com/agency-framewor
   'partialDir' => '.',
   'extension' => '.hbs',
   'prefix' => '',
+  'globalRelativeToRoot' => '', // Example: ../../
   'extraDefinitionsDefaultGroup' => 'default',
   'globalDisableMixin' => 'AGENCY_FRAMEWORK_HBS_GLOBAL_MIXIN_DEACTIVATED',
   'globalDisableExtraDefineArea' => 'AGENCY_FRAMEWORK_HBS_GLOBAL_EXTRA_DEFINE_AREA_DEACTIVATED',
@@ -43,6 +44,12 @@ Type: `string` | Default: `null`
 Sets prefix for hbs files.
 
 *Example: `prefix: "_" -> filename: "_partial.hbs"`*
+
+### globalRelativeToRoot
+
+Type: `string` | Default: `empty`
+
+Global variable name for `relativeToRoot` Variable.
 
 ### extraDefinitionsDefaultGroup
 
