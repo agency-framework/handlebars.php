@@ -162,19 +162,16 @@ class Core
         return $this->globalDisableExtraDefineArea;
     }
 
-    public function getExtraDefinitionAreaData($partialName, $properties = null)
+    public function getExtraDefinitionAreaData($partialName)
     {
         // force partial load, for get yaml data
         $this->getEngine()->getPartialsLoader()->load($partialName);
-
+        $GLOBALS[$this->globalExtraDefinitionsArea] = [];
         $GLOBALS[\AgencyFramework\Handlebars\Core::getInstance()->getGlobalExtraDefinitionsArea()] = [];
         $GLOBALS[\AgencyFramework\Handlebars\Core::getInstance()->getGlobalDisableMixin()] = true;
         $this->render($partialName, self::getDefaultPartialData($partialName));
         $GLOBALS[\AgencyFramework\Handlebars\Core::getInstance()->getGlobalDisableMixin()] = false;
-        $key = explode('/', $partialName);
-        $key = $key[count($key) - 1];
-        $properties[$key] = $GLOBALS[$this->getGlobalDisableExtraDefineArea()];
-        return $properties;
+        return $GLOBALS[$this->globalExtraDefinitionsArea];
     }
 
     public function getExtraDefinitionVarData($partialName, $properties = null)
