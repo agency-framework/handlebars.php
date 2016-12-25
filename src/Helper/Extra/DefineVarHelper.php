@@ -1,12 +1,12 @@
 <?php
-namespace AgencyFramework\Handlebars\Helpers;
+namespace AgencyFramework\Handlebars\Helper\Extra;
 
 use AgencyFramework\Handlebars\Core;
 use Handlebars\Context;
 use Handlebars\StringWrapper;
 use Handlebars\Template;
 
-class DefHelper implements \Handlebars\Helper
+class DefineVarHelper implements \Handlebars\Helper
 {
 
     private static function setVar(&$data, $path, $value)
@@ -46,7 +46,7 @@ class DefHelper implements \Handlebars\Helper
         $parsedNamedArgs = $template->parseNamedArguments($args);
 
         if (!array_key_exists('group', $parsedNamedArgs)) {
-            $parsedNamedArgs['group'] = new StringWrapper(Core::getInstance()->getDefDefaultGroup());
+            $parsedNamedArgs['group'] = new StringWrapper(Core::getInstance()->getGlobalExtraDefinitionsVar());
         }
         if ($parsedNamedArgs['group'] && !($context->get($parsedNamedArgs['group']) instanceof StringWrapper)) {
             if (!array_key_exists('type', $parsedNamedArgs)) {
@@ -62,9 +62,9 @@ class DefHelper implements \Handlebars\Helper
             }
             $parsedNamedArgs['group'] = $context->get($parsedNamedArgs['group']);
             if ($parsedNamedArgs['group']) {
-                self::setVar($GLOBALS[Core::getInstance()->getGlobalDefTemp()], [(string)$parsedNamedArgs['group']], $parsedNamedArgs);
+                self::setVar($GLOBALS[Core::getInstance()->getGlobalExtraDefinitionsVar()], [(string)$parsedNamedArgs['group']], $parsedNamedArgs);
             } else {
-                self::setVar($GLOBALS[Core::getInstance()->getGlobalDefTemp()], [Core::getInstance()->getDefDefaultGroup()], $parsedNamedArgs);
+                self::setVar($GLOBALS[Core::getInstance()->getGlobalExtraDefinitionsVar()], [Core::getInstance()->getExtraDefinitionsDefaultGroup()], $parsedNamedArgs);
             }
         }
 

@@ -1,5 +1,5 @@
 <?php
-namespace AgencyFramework\Handlebars\Helpers;
+namespace AgencyFramework\Handlebars\Helper;
 
 class LookupHelper implements \Handlebars\Helper
 {

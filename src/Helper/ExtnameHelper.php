@@ -1,7 +1,9 @@
 <?php
-namespace AgencyFramework\Handlebars\Helpers;
+namespace AgencyFramework\Handlebars\Helper;
 
-class RawHelper implements \Handlebars\Helper
+use AgencyFramework\Handlebars\Core;
+
+class ExtnameHelper implements \Handlebars\Helper
 {
     /**
      * @param \Handlebars\Template $template
@@ -13,8 +15,10 @@ class RawHelper implements \Handlebars\Helper
     public function execute(\Handlebars\Template $template, \Handlebars\Context $context, $args, $source)
     {
         $parsedArgs = $template->parseArguments($args);
-        return file_get_contents($context->get(current($parsedArgs)));
+        return pathinfo($parsedArgs[0], PATHINFO_EXTENSION);
     }
+
+
 }
 
 ?>

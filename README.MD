@@ -17,10 +17,12 @@ Handlebar.php Helper for [agency-boilerplate](https://github.com/agency-framewor
   'partialDir' => '.',
   'extension' => '.hbs',
   'prefix' => '',
-  'globalDefTemp' => 'AGENCY_BOILERPLATE_HBS_DEF_TEMP',
-  'globalMixinPath' => 'AGENCY_BOILERPLATE_HBS_MIXIN_PATH',
-  'globalMixinDeactivated' => 'AGENCY_BOILERPLATE_HBS_MIXIN_DEACTIVATED',
-  'defDefaultGroup' => 'default'
+  'extraDefinitionsDefaultGroup' => 'default',
+  'globalDisableMixin' => 'AGENCY_FRAMEWORK_HBS_GLOBAL_MIXIN_DEACTIVATED',
+  'globalDisableExtraDefineArea' => 'AGENCY_FRAMEWORK_HBS_GLOBAL_EXTRA_DEFINE_AREA_DEACTIVATED',
+  'globalExtraDefinitionsVar' => 'AGENCY_FRAMEWORK_HBS_EXTRA_DEFINITIONS_VAR',
+  'globalExtraDefinitionsArea' => 'AGENCY_FRAMEWORK_HBS_EXTRA_DEFINITIONS_AREA',  
+  'globalMixinPath' => 'AGENCY_FRAMEWORK_HBS_GLOBAL_MIXIN_PATH',
 ]
 ```
 
@@ -36,59 +38,132 @@ Type: `string` | Default: `.handlebars`
 
 ### prefix
 
-Type: `string` | Default: `empty`
+Type: `string` | Default: `null`
 
-Sets prefix for template files.
+Sets prefix for hbs files.
 
-### globalDefTemp
+*Example: `prefix: "_" -> filename: "_partial.hbs"`*
 
-Type: `string` | Default: `AGENCY_BOILERPLATE_HBS_DEF_TEMP`
+### extraDefinitionsDefaultGroup
 
-Name for global Def-Helper temp variable for call defintions.
+Type: `string` | Default: `default`
+
+Global variable name for default `definition-var` group.
+
+### globalDisableMixin
+
+Type: `string` | Default: `AGENCY_FRAMEWORK_HBS_GLOBAL_MIXIN_DEACTIVATED`
+
+Name for global variable to deactivate `mixin` helper.
+
+> `$GLOBALS['AGENCY_FRAMEWORK_HBS_MIXIN_DEACTIVATED']`
+
+
+### globalDisableExtraDefineArea
+
+Type: `string` | Default: `AGENCY_FRAMEWORK_HBS_GLOBAL_EXTRA_DEFINE_AREA_DEACTIVATED`
+
+Name for global variable to deactivate `define-area` helper.
+
+> `$GLOBALS['AGENCY_FRAMEWORK_HBS_GLOBAL_EXTRA_DEFINE_AREA_DEACTIVATED']`
+
+
+### globalExtraDefinitionsVar
+
+Type: `string` | Default: `AGENCY_FRAMEWORK_HBS_GLOBAL_EXTRA_DEFINITIONS_VAR`
+
+Global variable name for `definition-var` results.
+
+> `$GLOBALS['AGENCY_FRAMEWORK_HBS_GLOBAL_EXTRA_DEFINITIONS_VAR']`
+
+### globalExtraDefinitionsArea
+
+Type: `string` | Default: `AGENCY_FRAMEWORK_HBS_GLOBAL_EXTRA_DEFINITIONS_AREA`
+
+Global variable name for `definition-area` results.
+
+> `$GLOBALS['AGENCY_FRAMEWORK_HBS_GLOBAL_EXTRA_DEFINITIONS_AREA']`
 
 ### globalMixinPath
 
-Type: `string` | Default: `AGENCY_BOILERPLATE_HBS_MIXIN_PATH`
+Type: `string` | Default: `AGENCY_FRAMEWORK_HBS_GLOBAL_MIXIN_PATH`
 
 Name for global variable, need for rendering mixin.
 
-### globalMixinDeactivated
-
-Type: `string` | Default: `AGENCY_BOILERPLATE_HBS_MIXIN_DEACTIVATED`
-
-Name for global variable to deactivate mixin helper.
-
-### defDefaultGroup
-
-Type: `string` | Default: `default
-
-Sets partial dirs for loading partial via mixin helper.
-
-
-#### Example:
-
-> prefix: "_" -> filename: "_partial.hbs"
-
-## Features
-
-> yaml (in progress) <https://hbs-php-agency-boilerplate.herokuapp.com/tests/yaml>
+> `$GLOBALS['AGENCY_FRAMEWORK_HBS_MIXIN_PATH']`
 
 ### Helpers
 
 Available Helpers: `lookup`, `replace`, `raw`, `with`, `extname`, `base64`, `relative`, `stringify`
 
-#### Example Helper "mixin"
+#### `mixin` Helper
 
-<https://hbs-php-agency-boilerplate.herokuapp.com/tests/mixin>
+**Preview:** <https://hbs-php-agency-boilerplate.herokuapp.com/tests/mixin>
 
+#### `definition-area` Helper
+
+**Pattern**:
+
+For the rendering of an item, the partial attribute is required.
+This sets the path for the element that is rendered in the area.
+
+```javascript
+$data = [
+    'links' => [
+        [
+            'partial' => 'partial/link', // template path
+            'title' => 'Test Link 1.',
+            'url' => '#test-link-1'
+        ],
+        [
+            'partial' => 'partial/link', // template path
+            'title' => 'Test Link 2.',
+            'url' => '#test-link-2'
+        ]
+    ]
+];
+```
+
+Render with partial wrapper.
+
+```mustache
+<ul>
+  {{#definition-area links name="area-1"}}
+    <li>{{{this}}}</li>
+  {{/definition-area}}
+</ul>
+```
+
+Render without partial wrapper.
+
+```mustache
+<ul>
+  {{{#definition-area links name="area-1"}}}
+</ul>
+```
+
+##### Properties:
+
+Property      | Description
+------------- | -------------
+`name`        | Name
+
+###### name
+
+Type: `string`
+
+Sets property name.
+
+
+#### `definition-var` Helper
 
 **Pattern**:
 
 ```mustache
-{{{def name="PropertyName" type="PropertyType"}}}
+{{{definition-var name="PropertyName" type="PropertyType"}}}
 ```
 
-Properties:
+##### Properties:
 
 Property      | Description
 ------------- | -------------
@@ -99,19 +174,19 @@ Property      | Description
 `description` | Description
 `default`     | Default Value
 
-##### name
+###### name
 
 Type: `string`
 
 Sets property name.
 
-##### type
+###### type
 
 Type: `string`
 
 Sets property type.
 
-##### default
+###### default
 
 Type: `mixed`
 
@@ -163,8 +238,14 @@ echo $core->getEngine()->render('index', $data);
 ?>
 ```
 
+## Features
+
+> yaml (in progress) <https://hbs-php-agency-boilerplate.herokuapp.com/tests/yaml>
+
 ## TODOS
 
 - [x] mixin helper with block and content
 - [x] implement var helper, for define properties
 - [x] yaml placeholder data
+- [ ] implement relativeToRoot to mixin `ctx.relativeToRoot = options.data.root.relativeToRoot;`
+

@@ -6,20 +6,26 @@ namespace AgencyFramework\Handlebars;
 class Core
 {
 
-    const DEF_DEFAULT_GROUP = 'default';
+    const EXTRA_DEFINITIONS_DEFAULT_GROUP = 'default';
     protected static $instance = null;
     protected static $options = null;
+
+
+    // Extra definition
+
+    protected $globalExtraDefinitionsVar = 'AGENCY_FRAMEWORK_HBS_GLOBAL_EXTRA_DEFINITIONS_VAR';
+    protected $globalExtraDefinitionsArea = 'AGENCY_FRAMEWORK_HBS_GLOBAL_EXTRA_DEFINITIONS_AREA';
+    protected $extraDefinitionsDefaultGroup;
 
 
     /**
      * @var \Handlebars\Handlebars
      */
     protected $engine;
-    protected $globalDefTemp;
-    protected $globalMixinPath;
-    protected $globalMixinDeactivated;
+    protected $globalMixinPath = 'AGENCY_FRAMEWORK_HBS_GLOBAL_MIXIN_PATH';
+    protected $globalDisableMixin = 'AGENCY_FRAMEWORK_HBS_GLOBAL_MIXIN_DEACTIVATED';
+    protected $globalDisableExtraDefineArea = 'AGENCY_FRAMEWORK_HBS_GLOBAL_EXTRA_DEFINE_AREA_DEACTIVATED';
     private $partialsDefaultData = [];
-    protected $defDefaultGroup;
 
     /**
      * @return \AgencyFramework\Handlebars\Core
@@ -30,16 +36,37 @@ class Core
         return self::$instance;
     }
 
-    public function __construct($engine, $globalDefTemp, $globalMixinPath, $globalMixinDeactivated, $defaultDefGroup)
+    public function __construct($engine, $options)
     {
         $this->engine = $engine;
-        $this->globalDefTemp = $globalDefTemp;
-        $GLOBALS[$globalDefTemp] = null;
-        $this->globalMixinDeactivated = $globalMixinDeactivated;
-        $GLOBALS[$globalMixinDeactivated] = null;
-        $this->globalMixinPath = $globalMixinPath;
-        $GLOBALS[$globalMixinPath] = [];
-        $this->defDefaultGroup = $defaultDefGroup;
+
+        if (array_key_exists('globalExtraDefinitionsVar', $options)) {
+            $this->globalExtraDefinitionsVar = $options['globalExtraDefinitionsVar'];
+        }
+        $GLOBALS[$this->globalExtraDefinitionsVar] = [];
+        if (array_key_exists('globalExtraDefinitionsArea', $options)) {
+            $this->globalExtraDefinitionsArea = $options['globalExtraDefinitionsArea'];
+        }
+        $GLOBALS[$this->globalExtraDefinitionsArea] = [];
+        if (array_key_exists('extraDefinitionsDefaultGroup' ,$options)) {
+            $this->extraDefinitionsDefaultGroup = $options['extraDefinitionsDefaultGroup'];
+        }
+
+        if (array_key_exists('globalMixinPath', $options)) {
+            $this->globalMixinPath = $options['globalMixinPath'];
+        }
+        $GLOBALS[$this->globalMixinPath] = [];
+
+
+        if (array_key_exists('globalDisableMixin', $options)) {
+            $this->globalDisableMixin = $options['globalDisableMixin'];
+        }
+        $GLOBALS[$this->globalDisableMixin] = false;
+
+        if (array_key_exists('globalDisableExtraDefineArea' ,$options)) {
+            $this->globalDisableExtraDefineArea = $options['globalDisableExtraDefineArea'];
+        }
+        $GLOBALS[$this->globalDisableExtraDefineArea] = false;
     }
 
     /**
@@ -58,18 +85,6 @@ class Core
             if (!array_key_exists('prefix', $options)) {
                 $options['prefix'] = '';
             }
-            if (!array_key_exists('globalDefTemp', $options)) {
-                $options['globalDefTemp'] = 'AGENCY_BOILERPLATE_HBS_DEF_TEMP';
-            }
-            if (!array_key_exists('globalMixinPath', $options)) {
-                $options['globalMixinPath'] = 'AGENCY_BOILERPLATE_HBS_MIXIN_PATH';
-            }
-            if (!array_key_exists('globalMixinDeactivated', $options)) {
-                $options['globalMixinDeactivated'] = 'AGENCY_BOILERPLATE_HBS_MIXIN_DEACTIVATED';
-            }
-            if (!array_key_exists('defDefaultGroup', $options)) {
-                $options['defDefaultGroup'] = self::DEF_DEFAULT_GROUP;
-            }
         } else {
             throw new \InvalidArgumentException(
                 'empty options'
@@ -82,7 +97,7 @@ class Core
             'helpers' => new Helpers(),
             'loader' => new \AgencyFramework\Handlebars\Loader\FilesystemLoader($baseDirs, $options),
             'partials_loader' => new \AgencyFramework\Handlebars\Loader\FilesystemLoader($baseDirs, $options)
-        )), $options['globalDefTemp'], $options['globalMixinPath'], $options['globalMixinDeactivated'], $options['defDefaultGroup']);
+        )), $options);
         return self::$instance;
     }
 
@@ -104,9 +119,19 @@ class Core
         return $this->engine;
     }
 
-    public function getGlobalDefTemp()
+    public function getGlobalExtraDefinitionsVar()
     {
-        return $this->globalDefTemp;
+        return $this->globalExtraDefinitionsVar;
+    }
+
+    public function getGlobalExtraDefinitionsArea()
+    {
+        return $this->globalExtraDefinitionsArea;
+    }
+
+    public function getExtraDefinitionsDefaultGroup()
+    {
+        return $this->extraDefinitionsDefaultGroup;
     }
 
     public function getGlobalMixinPath()
@@ -114,34 +139,49 @@ class Core
         return $this->globalMixinPath;
     }
 
-    public function getGlobalMixinDeactivated()
+    public function getGlobalDisableMixin()
     {
-        return $this->globalMixinDeactivated;
+        return $this->globalDisableMixin;
     }
 
-    public function getDefDefaultGroup()
+    public function getGlobalDisableExtraDefineArea()
     {
-        return $this->defDefaultGroup;
+        return $this->globalDisableExtraDefineArea;
     }
 
-    public function getDefData($partialName, $properties = null)
+    public function getExtraDefinitionAreaData($partialName, $properties = null)
     {
         $core = \AgencyFramework\Handlebars\Core::getInstance();
 
         // force partial load, for get yaml data
         $core->getEngine()->getPartialsLoader()->load($partialName);
 
-        $GLOBALS[\AgencyFramework\Handlebars\Core::getInstance()->getGlobalDefTemp()] = [];
-        $GLOBALS[\AgencyFramework\Handlebars\Core::getInstance()->getGlobalMixinDeactivated()] = true;
+        $GLOBALS[\AgencyFramework\Handlebars\Core::getInstance()->getGlobalExtraDefinitionsArea()] = [];
+        $GLOBALS[\AgencyFramework\Handlebars\Core::getInstance()->getGlobalDisableMixin()] = true;
         $core->getEngine()->render($partialName, $core::getDefaultPartialData($partialName));
-        $GLOBALS[\AgencyFramework\Handlebars\Core::getInstance()->getGlobalMixinDeactivated()] = false;
+        $GLOBALS[\AgencyFramework\Handlebars\Core::getInstance()->getGlobalDisableMixin()] = false;
+        $key = explode('/', $partialName);
+        $key = $key[count($key) - 1];
+        $properties[$key] = $GLOBALS[$core->getGlobalDefTemp()];
+        return $properties;
+    }
+
+    public function getExtraDefinitionVarData($partialName, $properties = null)
+    {
+        $core = \AgencyFramework\Handlebars\Core::getInstance();
+
+        // force partial load, for get yaml data
+        $core->getEngine()->getPartialsLoader()->load($partialName);
+
+        $GLOBALS[\AgencyFramework\Handlebars\Core::getInstance()->getGlobalExtraDefinitionsVar()] = [];
+        $GLOBALS[\AgencyFramework\Handlebars\Core::getInstance()->getGlobalDisableMixin()] = true;
+        $core->getEngine()->render($partialName, $core::getDefaultPartialData($partialName));
+        $GLOBALS[\AgencyFramework\Handlebars\Core::getInstance()->getGlobalDisableMixin()] = false;
 
         $key = explode('/', $partialName);
         $key = $key[count($key) - 1];
         $properties[$key] = $GLOBALS[$core->getGlobalDefTemp()];
         return $properties;
-
-
     }
 
     public function getPathsFromMixins($partialName)
@@ -171,19 +211,20 @@ class Core
         $this->partialsDefaultData[$partialPath] = $data;
     }
 
-    public static function setVar($vars, $value, &$data)
+    public static function setVarDeep($vars, $value, &$data)
     {
         if (is_string($vars)) {
             $vars = explode('/', $vars);
         }
         $var = array_shift($vars);
         if (count($vars) > 0) {
-            $data[$var] = self::setVar($vars, $value, $data[$var]);
+            $data[$var] = self::setVarDeep($vars, $value, $data[$var]);
         } else {
             $data[$var] = $value;
         }
         return $data;
     }
+
 
     /**
      * @param array|string $vars
@@ -214,6 +255,21 @@ class Core
         }
         print_r($subContext);
         return $subContext[$varName];
+    }
+
+    public function render($layout, $data)
+    {
+        $html = $this->getEngine()->render($layout, $data);
+        $html = preg_replace_callback('/{{!--[\s\S]*?--}}/', 'rhc', $html);
+        return $html;
+    }
+
+    public function getVarDefinitions()
+    {
+    }
+
+    public function getAreaDefinitions()
+    {
     }
 
 }

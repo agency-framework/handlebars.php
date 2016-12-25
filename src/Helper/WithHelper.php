@@ -1,5 +1,5 @@
 <?php
-namespace AgencyFramework\Handlebars\Helpers;
+namespace AgencyFramework\Handlebars\Helper;
 
 class WithHelper implements \Handlebars\Helper
 {

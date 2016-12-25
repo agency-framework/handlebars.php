@@ -1,6 +1,6 @@
 <?php
 
-namespace AgencyFramework\Handlebars\Helpers;
+namespace AgencyFramework\Handlebars\Helper;
 
 use Handlebars\Context;
 use Handlebars\StringWrapper;

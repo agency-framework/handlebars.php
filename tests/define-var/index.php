@@ -29,8 +29,8 @@ echo $core->getEngine()->render('index', $yamlData);
 
     <?php
 
-    $definitions = $GLOBALS[$core::getInstance()->getGlobalDefTemp()];
-    foreach ($GLOBALS[$core::getInstance()->getGlobalDefTemp()] as $groupName => $group) {
+    $definitions = $GLOBALS[$core::getInstance()->getGlobalExtraDefinitionsVar()];
+    foreach ($GLOBALS[$core::getInstance()->getGlobalExtraDefinitionsVar()] as $groupName => $group) {
         foreach ($group as $field) {
             ?>
             <tr>

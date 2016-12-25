@@ -16,7 +16,7 @@ class FilesystemLoader extends \Handlebars\Loader\FilesystemLoader
     {
         $filename = $name;
         // if package path, reference to index file.
-        if (preg_match("/.*-pkg-.*/", $name, $match) && !preg_match("/\\/default$/", $name, $match)) {
+        if (preg_match("/.*-pkg-.*/", $name, $match) && !preg_match("/\\/index$/", $name, $match)) {
             $filename = preg_replace('/(.*)\/([^\/]*)$/', '$1/tmpl/$2', $filename);
             if (!preg_match('/\/[^\/]*$/', $filename)) {
                 $filename .= '/tmpl/default';
