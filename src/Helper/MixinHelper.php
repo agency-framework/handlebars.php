@@ -2,6 +2,7 @@
 
 namespace AgencyFramework\Handlebars\Helper;
 
+use AgencyFramework\Handlebars\Core;
 use Handlebars\Context;
 use Handlebars\StringWrapper;
 
@@ -22,7 +23,7 @@ class MixinHelper extends \JustBlackBird\HandlebarsHelpers\Layout\AbstractBlockH
         if (count($parsedArgs) > 0) {
             for ($i = 0; $i < count($parsedArgs); $i++) {
                 if (is_array($context->get(str_replace('this.', '../', $parsedArgs[$i])))) {
-                    $scope = array_merge_recursive($scope, $context->get(str_replace('this.', '../', $parsedArgs[$i])));
+                    $scope = Core::overrideMerge($scope, $context->get(str_replace('this.', '../', $parsedArgs[$i])), true);
                 }
             }
         }
@@ -33,7 +34,7 @@ class MixinHelper extends \JustBlackBird\HandlebarsHelpers\Layout\AbstractBlockH
         $core = \AgencyFramework\Handlebars\Core::getInstance();
         // preload for forced yaml exclude and saved temp.
         $core->getDefaultPartialData($partialName);
-        $scope = array_merge($core->getDefaultPartialData($partialName), $scope, ['relativeToRoot' => $GLOBALS[$core->getGlobalRelativeToRoot()]]);
+        $scope = array_merge(['relativeToRoot' => $GLOBALS[$core->getGlobalRelativeToRoot()]],Core::overrideMerge($core->getDefaultPartialData($partialName), $scope,true));
         $context->push($scope);
         $name = explode('/', $partialName);
         $name = end($name);

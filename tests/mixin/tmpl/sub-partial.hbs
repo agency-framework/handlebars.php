@@ -1,11 +1,12 @@
 ---
-key-1: 'Object-Key-1 Test DEFAULT'
-key-2: 'Object-Key-2 Test DEFAULT'
+list:
+    key-1: 'Object-Key-1 Test DEFAULT'
+    key-2: 'Object-Key-2 Test DEFAULT'
 ---
 
 <ul>
     {{#block "list"}}
-        {{#each this}}
+        {{#each list}}
             {{#if @key}}
                 <li>{{{@key}}}: {{{this}}}</li>
             {{else}}

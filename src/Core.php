@@ -294,6 +294,15 @@ class Core
         $GLOBALS[$this->globalRelativeToRoot] = $relativeToRoot;
     }
 
+    public static function overrideMerge($arrayA, $arrayB, $overwrite) {
+        foreach($arrayB as $key=>$val) {
+            if (!isset($arrayA[$key]) || $overwrite===true) {
+                $arrayA[$key] = $val;
+            }
+        }
+        return $arrayA;
+    }
+
 }
 
 ?>
