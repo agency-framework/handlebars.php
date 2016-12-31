@@ -309,13 +309,49 @@ class Core
         $GLOBALS[$this->globalRelativeToRoot] = $relativeToRoot;
     }
 
-    public static function overrideMerge($arrayA, $arrayB, $overwrite) {
-        foreach($arrayB as $key=>$val) {
-            if (!isset($arrayA[$key]) || $overwrite===true) {
-                $arrayA[$key] = $val;
+    /**
+     * Merge deep two arrays.
+     * Sets override, for apply all values from other array.
+     * @param array $arrayA
+     * @param array $arrayB
+     * @param bool $override Override all Values.
+     * @return mixed
+     */
+    public static function deepMerge(&$arrayA, $arrayB, $override = false)
+    {
+
+        if (array_key_exists(0, $arrayA) && (array_key_exists(1, $arrayA) || count($arrayA) === 1)) {
+            /*
+             * Simple Array and Array Object-Lists
+             */
+            foreach ($arrayB as $key => $value) {
+                if (is_array($value) && array_key_exists($key, $arrayA) && is_array($arrayA[$key])) {
+                    $arrayA[$key] = array_merge($arrayA[$key], $value);
+                } else if (!array_search($value, $arrayA)) {
+                    array_push($arrayA, $value);
+                }
+            }
+        } else {
+            /*
+             * Object-Array (HashMap)
+             */
+            foreach ($arrayB as $key => $value) {
+                if (array_key_exists($key, $arrayA)) {
+                    // Key exists
+                    if (is_array($arrayA[$key]) && is_array($value)) {
+                        $arrayA[$key] = self::deepMerge($arrayA[$key], $value, $override);
+
+                    } else if ($override) {
+                        $arrayA[$key] = $value;
+                    }
+                } else {
+                    $arrayA[$key] = $value;
+                }
             }
         }
+
         return $arrayA;
+
     }
 
 }

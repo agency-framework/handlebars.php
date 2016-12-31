@@ -8,7 +8,7 @@ class IfHelper implements \Handlebars\Helper
     {
         $parsedArgs = $template->parseArguments($args);
         $tmp = $context->get($parsedArgs[0]);
-        if ($tmp) {
+        if ($tmp && $tmp !== 'false') {
             $template->setStopToken('else');
             $buffer = $template->render($context);
             $template->setStopToken(false);
