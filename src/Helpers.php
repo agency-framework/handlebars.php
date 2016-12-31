@@ -12,7 +12,7 @@ class Helpers extends \Handlebars\Helpers
         $storage = new \JustBlackBird\HandlebarsHelpers\Layout\BlockStorage();
         $this->add('block', new \AgencyFramework\Handlebars\Helper\BlockHelper($storage));
         $this->add('mixin', new \AgencyFramework\Handlebars\Helper\MixinHelper($storage));
-        $this->add('content', new \JustBlackBird\HandlebarsHelpers\Layout\OverrideHelper($storage));
+        $this->add('content', new \AgencyFramework\Handlebars\Helper\ContentHelper($storage));
 
         $this->add('lookup', new \AgencyFramework\Handlebars\Helper\LookupHelper());
         $this->add('raw', new \AgencyFramework\Handlebars\Helper\RawHelper());

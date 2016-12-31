@@ -23,6 +23,8 @@ class Core
      * @var \Handlebars\Handlebars
      */
     protected $engine;
+    protected $globalBlocks = 'AGENCY_FRAMEWORK_GLOBAL_BLOCKS';
+    protected $globalBlocksIndex = 'AGENCY_FRAMEWORK_GLOBAL_BLOCK_INDEX';
     protected $globalMixinPath = 'AGENCY_FRAMEWORK_HBS_GLOBAL_MIXIN_PATH';
     protected $globalDisableMixin = 'AGENCY_FRAMEWORK_HBS_GLOBAL_MIXIN_DEACTIVATED';
     protected $globalDisableExtraDefineArea = 'AGENCY_FRAMEWORK_HBS_GLOBAL_EXTRA_DEFINE_AREA_DEACTIVATED';
@@ -75,6 +77,10 @@ class Core
             $this->globalDisableExtraDefineArea = $options['globalDisableExtraDefineArea'];
         }
         $GLOBALS[$this->globalDisableExtraDefineArea] = false;
+
+        $GLOBALS[$this->globalBlocks] = [];
+        $GLOBALS[$this->globalBlocksIndex] = 0;
+
     }
 
     /**
@@ -162,6 +168,16 @@ class Core
         return $this->globalDisableExtraDefineArea;
     }
 
+    public function getGlobalBlocks()
+    {
+        return $this->globalBlocks;
+    }
+
+    public function getGlobalBlocksIndex()
+    {
+        return $this->globalBlocksIndex;
+    }
+
     public function getExtraDefinitionAreaData($partialName)
     {
         // force partial load, for get yaml data
@@ -239,6 +255,9 @@ class Core
      */
     public static function getVarFromContext($vars, $context)
     {
+        if (!$context) {
+            return null;
+        }
         if (is_string($vars)) {
             $vars = explode('.', $vars);
         } else if ($vars instanceof \Handlebars\StringWrapper) {
@@ -259,7 +278,6 @@ class Core
         if (count($vars) > 0) {
             return self::getVarFromContext($vars, $subContext);
         }
-        print_r($subContext);
         return $subContext[$varName];
     }
 

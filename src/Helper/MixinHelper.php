@@ -34,28 +34,35 @@ class MixinHelper extends \JustBlackBird\HandlebarsHelpers\Layout\AbstractBlockH
         $core = \AgencyFramework\Handlebars\Core::getInstance();
         // preload for forced yaml exclude and saved temp.
         $core->getDefaultPartialData($partialName);
-        $scope = array_merge(['relativeToRoot' => $GLOBALS[$core->getGlobalRelativeToRoot()]],Core::overrideMerge($core->getDefaultPartialData($partialName), $scope,true));
+        // Added relativeToRoot to Context
+        $scope = array_merge(['relativeToRoot' => $GLOBALS[$core->getGlobalRelativeToRoot()]],
+            Core::overrideMerge($core->getDefaultPartialData($partialName), $scope,true));
         $context->push($scope);
         $name = explode('/', $partialName);
         $name = end($name);
 
         array_push($GLOBALS[\AgencyFramework\Handlebars\Core::getInstance()->getGlobalMixinPath()], $name);
 
-        // Added relativeToRoot to Context
-
         $buffer = null;
+        array_push($GLOBALS[Core::getInstance()->getGlobalBlocks()], []);
+        $GLOBALS[Core::getInstance()->getGlobalBlocksIndex()]++;
         if ($source) {
             $template->render($context);
             $this->level++;
             $buffer = $template->getEngine()->render($partialName, $context);
             $this->level--;
-            if ($this->level == 0) {
-                $this->blocksStorage->clear();
-            }
         } else {
+            $this->level++;
             $buffer = $template->getEngine()->render($partialName, $context);
+            $this->level--;
+        }
+        $GLOBALS[Core::getInstance()->getGlobalBlocksIndex()]--;
+        array_pop($GLOBALS[Core::getInstance()->getGlobalBlocks()]);
+        if ($this->level == 0) {
+            $this->blocksStorage->clear();
         }
         $context->pop();
+
         array_pop($GLOBALS[\AgencyFramework\Handlebars\Core::getInstance()->getGlobalMixinPath()]);
 
         return $buffer;
